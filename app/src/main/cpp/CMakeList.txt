@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.18.1)
+
+project(playeroutline)
+
+add_library(
+        playeroutline
+        SHARED
+        main.cpp
+        hook.cpp
+        outline.cpp
+        renderer.cpp)
+
+find_library(log-lib log)
+find_library(egl-lib EGL)
+find_library(gles-lib GLESv3)
+
+target_link_libraries(
+        playeroutline
+        ${log-lib}
+        ${egl-lib}
+        ${gles-lib})
