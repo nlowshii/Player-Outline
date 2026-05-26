@@ -1,0 +1,45 @@
+name: Build PlayerOutline SO
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android NDK
+        run: sdkmanager "ndk;25.2.9519653"
+
+      - name: Verify Files
+        run: |
+          ls
+          ls gradle
+          ls gradle/wrapper
+
+      - name: Grant Gradle Permission
+        run: chmod +x gradlew
+
+      - name: Build Native SO
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload SO Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: playeroutline-so
+          path: app/build/intermediates/cmake/debug/obj/
